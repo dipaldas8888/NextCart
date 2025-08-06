@@ -1,31 +1,49 @@
 import React, { useState } from "react";
-import { Menu, X, Search, ShoppingCart, Heart, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  ShoppingCart,
+  Heart,
+  User,
+  ShoppingBag,
+} from "lucide-react";
+import { Link } from "react-router-dom"; // Import Link for proper SPA routing
 
 function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Dummy authentication flag (replace with actual auth state)
+  const isLoggedIn = false;
 
   return (
     <nav className="relative flex items-center py-4 px-6 justify-between border-b">
-      <div>
+      {/* Logo */}
+      <div className="flex items-center gap-2">
+        <ShoppingBag className="text-gray-800" size={28} />
         <h2 className="text-2xl font-bold">NextCart</h2>
       </div>
 
+      {/* Center Links */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex gap-8">
-        <a href="#" className="text-gray-600 hover:text-gray-800">
+        <Link to="#" className="text-gray-600 hover:text-gray-800">
           Shop
-        </a>
-        <a href="#" className="text-gray-600 hover:text-gray-800">
+        </Link>
+        <Link to="#" className="text-gray-600 hover:text-gray-800">
           Men
-        </a>
-        <a href="#" className="text-gray-600 hover:text-gray-800">
+        </Link>
+        <Link to="#" className="text-gray-600 hover:text-gray-800">
           Women
-        </a>
-        <a href="#" className="text-gray-600 hover:text-gray-800">
+        </Link>
+        <Link to="#" className="text-gray-600 hover:text-gray-800">
           Kids
-        </a>
+        </Link>
       </div>
 
+      {/* Right Icons */}
       <div className="flex items-center gap-4">
+        {/* Search */}
         <div className="relative hidden lg:block">
           <input
             type="text"
@@ -35,16 +53,60 @@ function Navigation() {
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
         </div>
 
-        <a href="/cart" className="text-gray-600 hover:text-gray-800">
+        {/* Icons */}
+        <Link to="/cart" className="text-gray-600 hover:text-gray-800">
           <ShoppingCart size={24} />
-        </a>
-        <a href="/wishlist" className="text-gray-600 hover:text-gray-800">
+        </Link>
+        <Link to="/wishlist" className="text-gray-600 hover:text-gray-800">
           <Heart size={24} />
-        </a>
-        <a href="/account" className="text-gray-600 hover:text-gray-800">
-          <User size={24} />
-        </a>
+        </Link>
 
+        {/* User Menu */}
+        <div className="relative">
+          <button onClick={() => setUserMenuOpen(!userMenuOpen)}>
+            <User className="text-gray-600 hover:text-gray-800" size={24} />
+          </button>
+          {userMenuOpen && (
+            <div className="absolute right-0 mt-2 bg-white border rounded-md shadow-lg w-40 z-20">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to="/account"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to="/orders"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    My Orders
+                  </Link>
+                  <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden"
@@ -53,21 +115,22 @@ function Navigation() {
         </button>
       </div>
 
+      {/* Mobile Nav Links */}
       {mobileMenuOpen && (
         <div className="absolute top-full left-0 w-full bg-white shadow-md md:hidden z-10">
           <div className="flex flex-col items-center py-4 gap-4">
-            <a href="#" className="text-gray-600 hover:text-gray-800">
+            <Link to="#" className="text-gray-600 hover:text-gray-800">
               Shop
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
+            </Link>
+            <Link to="#" className="text-gray-600 hover:text-gray-800">
               Men
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
+            </Link>
+            <Link to="#" className="text-gray-600 hover:text-gray-800">
               Women
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
+            </Link>
+            <Link to="#" className="text-gray-600 hover:text-gray-800">
               Kids
-            </a>
+            </Link>
           </div>
         </div>
       )}
