@@ -39,16 +39,13 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, name, password) => {
     try {
-      // Send to backend for server-side creation (via Firebase Admin SDK)
       const response = await axios.post("http://localhost:8080/auth/register", {
         name,
         email,
         password,
-        // Add phoneNumber if needed; role defaults to "USER" on backend
       });
       console.log("[BACKEND REGISTERED]", response.data);
 
-      // After successful backend creation, auto-login client-side
       return await login(email, password);
     } catch (error) {
       console.error("[REGISTER ERROR]", error);

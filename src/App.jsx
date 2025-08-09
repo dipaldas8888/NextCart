@@ -4,6 +4,7 @@ import Home from "./pages/Home"; // Example pages
 import Login from "./pages/Login"; // Example pages
 import Register from "./pages/Register"; // Example pages
 import Navigation from "./components/Navigation/Navigation";
+import Products from "./pages/Products"; // Import the Products page
 import "./App.css";
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/products" element={<Products />} />
+        {/* Add more routes as needed */}
       </Routes>
     </Router>
   );
