@@ -1,9 +1,14 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, placeOrder, getTotalPrice } = useCart();
+
+  useEffect(() => {
+    console.log("Cart items updated:", cartItems);
+  }, [cartItems]);
 
   if (cartItems.length === 0)
     return <p className="text-center py-8">Cart is empty.</p>;
