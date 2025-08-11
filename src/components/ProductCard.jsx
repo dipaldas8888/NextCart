@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const ProductCard = ({ src, price, name, description }) => {
+const ProductCard = ({ id, src, price, name, description }) => {
   return (
     <>
       <style>{`
@@ -10,9 +11,8 @@ const ProductCard = ({ src, price, name, description }) => {
             font-family: 'Poppins', sans-serif;
         }
       `}</style>
-
       <div className="flex flex-col bg-white shadow-md w-72">
-        <img className="w-72 h-48 object-cover" src={src} alt={name} />
+        <img className="w-72 h-48 object-contain" src={src} alt={name} />
         <div className="p-4 text-sm">
           <p className="text-slate-600">$ {price.toFixed(2)}</p>
           <p className="text-slate-800 text-base font-medium my-1.5">{name}</p>
@@ -21,7 +21,11 @@ const ProductCard = ({ src, price, name, description }) => {
             <button className="bg-slate-100 text-slate-600 py-2">
               Add to cart
             </button>
-            <button className="bg-slate-800 text-white py-2">Buy now</button>
+            <Link to={`/products/${id}`}>
+              <button className="bg-slate-800 text-white py-2 w-full">
+                Buy now
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -6,17 +6,23 @@ import Register from "./pages/Register"; // Example pages
 import Navigation from "./components/Navigation/Navigation";
 import Products from "./pages/Products"; // Import the Products page
 import "./App.css";
+import { CartProvider } from "./context/CartContext";
+import CartPage from "./pages/CartPage"; // Import the CartPage
+import ProductDetail from "./pages/ProductDetail"; // Import the ProductDetail page
 function App() {
   return (
     <Router>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<Products />} />
-        {/* Add more routes as needed */}
-      </Routes>
+      <CartProvider>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+        </Routes>
+      </CartProvider>
     </Router>
   );
 }

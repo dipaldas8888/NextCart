@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useCart } from "../context/CartContext"; // ✅ Correct
 
 export default function ProductDetail() {
-  const { id } = useParams(); // id will be a string from the route
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -47,7 +49,10 @@ export default function ProductDetail() {
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
           <p className="text-gray-700 mb-4">{product.description}</p>
           <p className="text-xl font-semibold mb-6">${product.price}</p>
-          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+          <button
+            onClick={() => addToCart(product)} // ✅ Add to cart
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+          >
             Add to Cart
           </button>
         </div>
