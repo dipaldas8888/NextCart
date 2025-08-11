@@ -51,6 +51,7 @@ import api from "../api/api";
 import { useCart } from "../context/CartContext"; // ✅ Correct
 
 import { useAuth } from "../context/AuthContext";
+import Hero from "../assets/img/hero_img.png";
 
 const Products = () => {
   const { loading: authLoading } = useAuth(); // ✅ get auth loading
@@ -65,6 +66,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await api.get("/product/get-all");
+        console.log("[PRODUCTS FETCHED]", response.data.productList);
         setProducts(response.data.productList || []);
       } catch (err) {
         setError("Failed to load products.");
@@ -79,44 +81,62 @@ const Products = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="flex flex-col sm:flex-row border">
+        {/* Left Text Section */}
+        <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0">
+          <div className="text-[#414141]">
+            {/* Bestseller Tag */}
+            <div className="flex items-center gap-2">
+              <p className="w-8 md:w-11 h-[2px] bg-[#414141]"></p>
+              <p className="font-medium text-sm md:text-base">
+                OUR BESTSELLERS
+              </p>
+            </div>
+
+            {/* Heading */}
+            <h1 className="prata-regular text-3xl sm:py-3 lg:text-5xl leading-relaxed">
+              Latest Arrivals
+            </h1>
+
+            {/* Shop Now Link */}
+            <div className="flex items-center gap-2">
+              <p className="font-semibold text-sm md:text-base">SHOP NOW</p>
+              <p className="w-8 md:w-11 h-[1px] bg-[#414141]"></p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Image Section */}
+        <img className="w-full sm:w-1/2" src={Hero} alt="Hero Banner" />
+      </div>
+      <h2 className="text-2xl font-bold mb-6 py-5">All Products</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-26">
         {products.map((product) => (
           <div
             key={product.id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+            className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
           >
             <Link to={`/products/${product.id}`}>
-              <img
-                src={`http://localhost:8080${product.imageUrl}`}
-                alt={product.name}
-                className="w-full h-48 object-contain mb-4"
-              />
-              <h3 className="text-lg font-semibold">{product.name}</h3>
-              <p className="text-gray-600">${product.price}</p>
-              <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-                {product.description}
-              </p>
-            </Link>
+              {/* Image container with fixed aspect ratio */}
+              <div className="aspect-[4/5] w-full overflow-hidden bg-gray-50">
+                <img
+                  src={`http://localhost:8080${product.imageUrl}`}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              <button
-                className="bg-slate-100 text-slate-600 py-2 rounded"
-                onClick={() => addToCart(product)} // ✅ Add to cart
-              >
-                Add to Cart
-              </button>
-              <Link to={`/products/${product.id}`}>
-                <button className="bg-slate-800 text-white py-2 rounded w-full">
-                  Buy Now
-                </button>
-              </Link>
-            </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold truncate">
+                  {product.name}
+                </h3>
+                <p className="text-gray-600">${product.price}</p>
+              </div>
+            </Link>
           </div>
         ))}
       </div>
     </div>
   );
 };
-
 export default Products;
