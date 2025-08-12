@@ -1,12 +1,17 @@
-import Herosection from "@/components/HeroSection/Herosection";
-import NewArrivals from "@/components/Sections/NewArrivals";
 import React from "react";
+import Banner from "@/components/Banner";
+import ProductExample from "@/components/ProductExample";
+import HeroSlider from "@/components/HeroSection/HeroSlider";
+import Testimonials from "@/components/Testimonials";
 
 function Home() {
   return (
     <div>
-      <Herosection />
-      <NewArrivals />
+      <HeroSlider />
+
+      <ProductExample />
+      <Banner />
+      <Testimonials />
     </div>
   );
 }
