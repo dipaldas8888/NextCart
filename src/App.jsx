@@ -9,6 +9,7 @@ import "./App.css";
 import { CartProvider } from "./context/CartContext";
 import CartPage from "./pages/CartPage"; // Import the CartPage
 import ProductDetail from "./pages/ProductDetail"; // Import the ProductDetail page
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
+      <Footer />
     </>
   );
 }
