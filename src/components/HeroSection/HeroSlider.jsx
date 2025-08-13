@@ -30,7 +30,7 @@ export default function HeroSlider() {
             <img
               src={src}
               alt={`slider ${index + 1}`}
-              className="w-full h-[300px] sm:h-[450px] md:h-[550px] lg:h-[650px] object-cover"
+              className="w-full h-[300px] sm:h-[450px] md:h-[550px] lg:h-[650px] object-cover "
             />
           </div>
         ))}

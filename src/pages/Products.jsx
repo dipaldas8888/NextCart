@@ -110,7 +110,7 @@ const Products = () => {
         <img className="w-full sm:w-1/2" src={Hero} alt="Hero Banner" />
       </div>
       <h2 className="text-2xl font-bold mb-6 py-5">All Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-26">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div
             key={product.id}
