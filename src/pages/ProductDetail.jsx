@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // ✅ Correct
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -18,9 +18,8 @@ export default function ProductDetail() {
         if (!res.ok) throw new Error("Failed to fetch product");
 
         const data = await res.json();
-        setProduct(data.product); // ✅ only store the nested product
+        setProduct(data.product);
       } catch (err) {
-        console.error(err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -29,33 +28,68 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
-  if (loading) {
-    return <div className="p-4">Loading product details...</div>;
-  }
 
-  if (error) {
-    return <div className="p-4 text-red-500">Error: {error}</div>;
-  }
+  if (loading) return <div className="p-4 text-center">Loading product...</div>;
+  if (error) return <div className="p-4 text-red-500 text-center">{error}</div>;
+  if (!product) return <div className="p-4 text-center">No product found</div>;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* Left: Image Gallery */}
+      <div className="lg:col-span-4 flex flex-col items-center">
         <img
-          src={`http://localhost:8080${product.imageUrl}`}
+          src={product.imageUrl}
           alt={product.name}
-          className="w-full h-96 object-cover rounded-lg shadow"
+          className="w-full h-[400px] object-cover rounded-lg border"
         />
-        <div>
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <p className="text-gray-700 mb-4">{product.description}</p>
-          <p className="text-xl font-semibold mb-6">${product.price}</p>
-          <button
-            onClick={() => addToCart(product)} // ✅ Add to cart
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Add to Cart
-          </button>
+        {/* Thumbnails (replace with product.images if you have multiple) */}
+        <div className="flex gap-3 mt-4">
+          {[1, 2, 3].map((i) => (
+            <img
+              key={i}
+              src={product.imageUrl}
+              alt="thumb"
+              className="w-16 h-16 object-cover rounded-lg border hover:border-blue-500 cursor-pointer"
+            />
+          ))}
         </div>
+      </div>
+
+      {/* Middle: Product Info */}
+      <div className="lg:col-span-5">
+        <h1 className="text-2xl font-semibold">{product.name}</h1>
+        <div className="flex items-center gap-2 mt-2 text-yellow-500">
+          ⭐⭐⭐⭐☆
+          <span className="text-sm text-gray-600">(837 ratings)</span>
+        </div>
+        <div className="mt-4 text-3xl font-bold text-red-600">
+          ₹{product.price}
+        </div>
+        <p className="mt-4 text-gray-700">{product.description}</p>
+
+        {/* Offers section */}
+        <div className="mt-6 space-y-2">
+          <div className="p-3 border rounded-lg">
+            <strong>Bank Offer:</strong> Up to ₹1,000 off on select cards
+          </div>
+          <div className="p-3 border rounded-lg">
+            <strong>EMI:</strong> Starts at ₹118/month
+          </div>
+        </div>
+      </div>
+
+      {/* Right: Buy Box */}
+      <div className="lg:col-span-3 p-4 border rounded-lg shadow-sm">
+        <div className="text-2xl font-semibold text-red-600">
+          ₹{product.price}
+        </div>
+        <p className="text-green-600 mt-1">Available to ship in 1-2 days</p>
+        <button
+          onClick={() => addToCart(product)}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 rounded-lg mt-4"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

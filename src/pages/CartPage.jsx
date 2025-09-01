@@ -1,50 +1,89 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
 
 const CartPage = () => {
-  const { cartItems, removeFromCart, placeOrder, getTotalPrice } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getTotalPrice,
+    placeOrder,
+  } = useCart();
 
-  useEffect(() => {
-    console.log("Cart items updated:", cartItems);
-  }, [cartItems]);
-
-  if (cartItems.length === 0)
-    return <p className="text-center py-8">Cart is empty.</p>;
+  if (cartItems.length === 0) {
+    return (
+      <p className="text-center py-8 text-gray-600">Your cart is empty.</p>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Your Cart</h2>
-      <div className="grid grid-cols-1 gap-4">
+    <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="lg:col-span-9 bg-white p-4 rounded shadow-sm">
+        <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
+
         {cartItems.map((item) => (
-          <div key={item.productId} className="flex items-center border p-4">
+          <div
+            key={item.productId}
+            className="flex py-4 border-b last:border-none"
+          >
             <img
-              src={`http://localhost:8080${item.imageUrl}`}
+              src={item.imageUrl}
               alt={item.name}
-              className="w-24 h-24 object-contain"
+              className="w-28 h-28 object-contain"
             />
-            <div className="ml-4 flex-1">
-              <p className="font-medium">{item.name}</p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: ${(item.price * item.quantity).toFixed(2)}</p>
-              <button
-                onClick={() => removeFromCart(item.productId)}
-                className="text-red-500"
-              >
-                Remove
-              </button>
+
+            <div className="flex-1 ml-4">
+              <p className="font-medium text-lg leading-snug">{item.name}</p>
+              <p className="text-green-600 text-sm mt-1">In stock</p>
+              <p className="text-xs text-gray-600">
+                Eligible for FREE Shipping
+              </p>
+
+              <div className="flex items-center gap-4 mt-3">
+                <div className="flex items-center border rounded-full px-2 py-1">
+                  <button
+                    onClick={() => removeFromCart(item.productId)}
+                    className="mr-2 text-gray-600 hover:text-red-600"
+                  >
+                    🗑
+                  </button>
+                  <select
+                    value={item.quantity}
+                    onChange={(e) =>
+                      updateQuantity(item.productId, parseInt(e.target.value))
+                    }
+                    className="border-none focus:ring-0 text-sm"
+                  >
+                    {[...Array(10).keys()].map((n) => (
+                      <option key={n + 1} value={n + 1}>
+                        {n + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-right font-semibold text-lg text-gray-900">
+              ₹{(item.price * item.quantity).toFixed(2)}
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-6 text-right">
-        <p className="text-xl">Total: ${getTotalPrice().toFixed(2)}</p>
+
+      <div className="lg:col-span-3 bg-white p-4 rounded shadow-sm h-fit">
+        <p className="text-lg font-medium">
+          Subtotal ({cartItems.length} item
+          {cartItems.length > 1 ? "s" : ""}):{" "}
+          <span className="font-semibold text-red-600">
+            ₹{getTotalPrice().toFixed(2)}
+          </span>
+        </p>
         <button
           onClick={placeOrder}
-          className="bg-green-500 text-white px-6 py-2 mt-4"
+          className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded shadow"
         >
-          Place Order
+          Proceed to Buy
         </button>
       </div>
     </div>

@@ -54,6 +54,7 @@ export default function HomePage() {
         />
       </div>
 
+      {/* Women Products */}
       <h2 className="text-2xl font-bold my-6">Women Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {womenProducts.map((product) => (
@@ -81,7 +82,9 @@ export default function HomePage() {
         ))}
       </div>
 
+      {/* banner */}
       <section className="my-12">
+        {" "}
         <img
           src={banner}
           alt="Promotional Banner"
@@ -89,6 +92,7 @@ export default function HomePage() {
         />
       </section>
 
+      {/* Men Products */}
       <h2 className="text-2xl font-bold my-6">Men Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {menProducts.map((product) => (

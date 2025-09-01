@@ -45,6 +45,14 @@ export const CartProvider = ({ children }) => {
   const removeFromCart = (productId) => {
     setCartItems(cartItems.filter((item) => item.productId !== productId));
   };
+  const updateQuantity = (productId, quantity) => {
+    if (quantity < 1) return; // prevent 0 or negative quantities
+    setCartItems(
+      cartItems.map((item) =>
+        item.productId === productId ? { ...item, quantity } : item
+      )
+    );
+  };
 
   const getTotalPrice = () => {
     return cartItems.reduce(
@@ -65,7 +73,8 @@ export const CartProvider = ({ children }) => {
     };
 
     try {
-      await api.post("/order/create", orderRequest);
+      const res = await api.post("/order/create", orderRequest);
+      console.log("Order response:", res.data);
       alert("Order placed successfully!");
       setCartItems([]);
       navigate("/orders");
@@ -83,6 +92,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         placeOrder,
         getTotalPrice,
+        updateQuantity,
       }}
     >
       {children}
