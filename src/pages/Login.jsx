@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,11 +15,20 @@ export default function Login() {
     try {
       console.log("[LOGIN ATTEMPT]", email);
       await login(email, password);
+      toast.success("Login successful!");
       console.log("[LOGIN SUCCESS] Redirecting...");
       navigate("/");
     } catch (err) {
-      console.error("[LOGIN FAILED]", err);
-      setError("Invalid email or password");
+      console.error("[REGISTER FAILED]", err);
+
+      // Check if backend (axios) error response
+      const message =
+        err.response?.data?.message || // your backend returns { message: "..." }
+        err.message || // Firebase or JS error
+        "Registration failed. Please try again.";
+
+      toast.error(message); // Show toaster with actual error
+      setError(message);
     }
   };
   return (
@@ -41,21 +51,9 @@ export default function Login() {
             Welcome back! Please sign in to continue
           </p>
 
-          <button
-            type="button"
-            className="w-full mt-8 bg-gray-500/10 flex items-center justify-center h-12 rounded-full"
-          >
-            <img
-              src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
-              alt="googleLogo"
-            />
-          </button>
-
           <div className="flex items-center gap-4 w-full my-5">
             <div className="w-full h-px bg-gray-300/90"></div>
-            <p className="w-full text-nowrap text-sm text-gray-500/90">
-              or sign in with email
-            </p>
+
             <div className="w-full h-px bg-gray-300/90"></div>
           </div>
 
@@ -105,18 +103,6 @@ export default function Login() {
             />
           </div>
 
-          <div className="w-full flex items-center justify-between mt-8 text-gray-500/80">
-            <div className="flex items-center gap-2">
-              <input className="h-5" type="checkbox" id="checkbox" />
-              <label className="text-sm" htmlFor="checkbox">
-                Remember me
-              </label>
-            </div>
-            <a className="text-sm underline" href="#">
-              Forgot password?
-            </a>
-          </div>
-
           <button
             type="submit"
             className="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
@@ -125,7 +111,7 @@ export default function Login() {
           </button>
           <p className="text-gray-500/90 text-sm mt-4">
             Don’t have an account?{" "}
-            <Link className="text-indigo-400 hover:underline" href="/register">
+            <Link className="text-indigo-400 hover:underline" to="/register">
               Sign up
             </Link>
           </p>

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const CartContext = createContext();
 
@@ -75,12 +76,12 @@ export const CartProvider = ({ children }) => {
     try {
       const res = await api.post("/order/create", orderRequest);
       console.log("Order response:", res.data);
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
       setCartItems([]);
-      navigate("/orders");
+      navigate("/");
     } catch (err) {
       console.error("Order failed:", err);
-      alert("Failed to place order.");
+      toast.error("Failed to place order.");
     }
   };
 

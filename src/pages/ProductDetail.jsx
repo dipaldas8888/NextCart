@@ -35,14 +35,12 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-      {/* Left: Image Gallery */}
       <div className="lg:col-span-4 flex flex-col items-center">
         <img
           src={product.imageUrl}
           alt={product.name}
           className="w-full h-[400px] object-cover rounded-lg border"
         />
-        {/* Thumbnails (replace with product.images if you have multiple) */}
         <div className="flex gap-3 mt-4">
           {[1, 2, 3].map((i) => (
             <img
@@ -55,7 +53,6 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* Middle: Product Info */}
       <div className="lg:col-span-5">
         <h1 className="text-2xl font-semibold">{product.name}</h1>
         <div className="flex items-center gap-2 mt-2 text-yellow-500">
@@ -67,7 +64,6 @@ export default function ProductDetail() {
         </div>
         <p className="mt-4 text-gray-700">{product.description}</p>
 
-        {/* Offers section */}
         <div className="mt-6 space-y-2">
           <div className="p-3 border rounded-lg">
             <strong>Bank Offer:</strong> Up to ₹1,000 off on select cards
@@ -78,7 +74,6 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* Right: Buy Box */}
       <div className="lg:col-span-3 p-4 border rounded-lg shadow-sm">
         <div className="text-2xl font-semibold text-red-600">
           ₹{product.price}

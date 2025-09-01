@@ -46,13 +46,12 @@ export const AuthProvider = ({ children }) => {
       });
       console.log("[BACKEND REGISTERED]", response.data);
 
-      return await login(email, password);
+      return { success: true, data: response.data };
     } catch (error) {
       console.error("[REGISTER ERROR]", error);
       throw error;
     }
   };
-
   const logout = () => signOut(auth);
 
   const getIdToken = async () => {
