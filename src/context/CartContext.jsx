@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+const { user } = useAuth();
+
 import { toast } from "react-hot-toast";
 
 const CartContext = createContext();
@@ -63,6 +65,12 @@ export const CartProvider = ({ children }) => {
   };
 
   const placeOrder = async () => {
+    if (!user) {
+      alert("Please login to place an order.");
+      navigate("/login");
+      return;
+    }
+
     if (cartItems.length === 0) return;
 
     const orderRequest = {

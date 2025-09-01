@@ -2,16 +2,17 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Menu, X, ShoppingCart, User, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
+  const { cartItems } = useCart();
   const isLoggedIn = !!user;
 
   const userMenuRef = useRef(null);
 
-  // close when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
@@ -31,7 +32,6 @@ function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
-        {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-2 hover:opacity-80 transition"
@@ -42,7 +42,6 @@ function Navigation() {
           </h2>
         </Link>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8 font-medium">
           {navLinks.map((l) => (
             <Link
@@ -55,21 +54,19 @@ function Navigation() {
           ))}
         </div>
 
-        {/* Right Section */}
         <div className="flex items-center gap-6">
-          {/* Cart Button */}
           <Link
             to="/cart"
             className="relative text-gray-600 hover:text-indigo-600 transition"
           >
             <ShoppingCart size={24} />
-            {/* Example static badge count */}
-            <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              0
-            </span>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
           </Link>
 
-          {/* User Dropdown */}
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => setUserMenuOpen((prev) => !prev)}
@@ -111,7 +108,6 @@ function Navigation() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             className="md:hidden text-gray-600 hover:text-indigo-600 transition"
@@ -121,7 +117,6 @@ function Navigation() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg border-t">
           <div className="flex flex-col py-4 gap-4 px-6">

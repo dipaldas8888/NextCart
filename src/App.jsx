@@ -11,7 +11,9 @@ import CartPage from "./pages/CartPage"; // Import the CartPage
 import ProductDetail from "./pages/ProductDetail"; // Import the ProductDetail page
 import Footer from "./components/Footer";
 import AboutUs from "./pages/AboutUs";
+import ProtectedRoute from "./context/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
+
 function App() {
   return (
     <>
@@ -23,7 +25,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<CartPage />} />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/about" element={<AboutUs />} />
       </Routes>
