@@ -6,6 +6,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import api from "@/api/api";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, name, password) => {
     try {
-      const response = await axios.post("http://localhost:8080/auth/register", {
+      const response = await api.post("/auth/register", {
         name,
         email,
         password,
