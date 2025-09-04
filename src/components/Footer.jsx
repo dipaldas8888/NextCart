@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="px-6 md:px-16 lg:px-24 xl:px-32 pt-8 w-full text-gray-500">
@@ -20,16 +22,16 @@ export default function Footer() {
             <h2 className="font-semibold mb-5 text-gray-800">Company</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a href="#">Home</a>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <a href="#">About us</a>
+                <Link to="/about">About us</Link>
               </li>
               <li>
-                <a href="#">Contact us</a>
+                <Link href="#">Contact us</Link>
               </li>
               <li>
-                <a href="#">Privacy policy</a>
+                <Link href="#">Privacy policy</Link>
               </li>
             </ul>
           </div>
@@ -57,7 +59,7 @@ export default function Footer() {
         </div>
       </div>
       <p className="pt-4 text-center text-xs md:text-sm pb-5">
-        Copyright 2024 © <a href="https://prebuiltui.com">PrebuiltUI</a>. All
+        Copyright 2024 © <a href="https://prebuiltui.com">NextCart</a>. All
         Right Reserved.
       </p>
     </footer>
