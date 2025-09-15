@@ -6,13 +6,14 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [category, setCategory] = useState("Men");
+  const [category, setCategory] = useState("Men"); // default category
   const [search, setSearch] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 5000]);
+  const [priceRange, setPriceRange] = useState([0, 2500]); // changed max to 2500
 
   const [page, setPage] = useState(1);
   const perPage = 8;
 
+  // fetch by category
   const fetchByCategory = async (cat) => {
     try {
       setLoading(true);
@@ -39,13 +40,13 @@ export default function Products() {
     setPage(1);
   }, [category]);
 
+  // client-side filter (search + price)
   const filtered = products.filter((p) => {
     const name = (p.name ?? p.title ?? "").toString().toLowerCase();
     const matchesSearch =
       search.trim() === "" || name.includes(search.toLowerCase());
 
     const price = Number(p.price ?? p.mrp ?? 0);
-
     const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
 
     return matchesSearch && matchesPrice;
@@ -56,16 +57,31 @@ export default function Products() {
 
   const resetFilters = () => {
     setSearch("");
-    setPriceRange([0, 5000]);
+    setPriceRange([0, 2500]);
     setCategory("Men");
     setPage(1);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mb-10">
-      <div className="flex gap-8">
-        <aside className="hidden md:block w-72 flex-shrink-0">
+    <div className="max-w-8xl mx-auto px-4 mb-10">
+      <div className="flex gap-6">
+        {/* Sidebar */}
+        <aside className="hidden md:block w-56 flex-shrink-0">
           <div className="bg-white rounded-lg shadow-sm p-5 sticky top-24">
+            {/* Search */}
+            <div className="relative">
+              <input
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search..."
+                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none"
+              />
+            </div>
+
+            {/* Category */}
             <div className="mt-6">
               <h3 className="font-semibold text-lg mb-3">Category</h3>
               <div className="space-y-2 text-sm">
@@ -88,6 +104,7 @@ export default function Products() {
               </div>
             </div>
 
+            {/* Price */}
             <div className="mt-6">
               <h3 className="font-semibold text-lg mb-3">Price Range</h3>
               <p className="text-sm text-gray-600">
@@ -97,7 +114,7 @@ export default function Products() {
               <input
                 type="range"
                 min={0}
-                max={5000}
+                max={2500}
                 step={10}
                 value={priceRange[1]}
                 onChange={(e) => {
@@ -118,6 +135,7 @@ export default function Products() {
           </div>
         </aside>
 
+        {/* Products Grid */}
         <main className="flex-1">
           <div className="flex items-center justify-between mb-4 mt-2">
             <h2 className="text-2xl font-bold">
@@ -139,13 +157,15 @@ export default function Products() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Grid: 1 on small, 2 on md, 4 on lg */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {paginated.map((product) => (
                   <Link
                     key={product.id}
                     to={`/products/${product.id}`}
-                    className="group relative block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition"
+                    className="group relative block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition bg-white"
                   >
+                    {/* Wishlist */}
                     <button
                       type="button"
                       className="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75"
@@ -155,7 +175,6 @@ export default function Products() {
                       }}
                     >
                       <span className="sr-only">Wishlist</span>
-                      {/* svg ... */}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -172,18 +191,22 @@ export default function Products() {
                       </svg>
                     </button>
 
-                    <img
-                      src={
-                        product.imageUrl ??
-                        product.image ??
-                        product.thumbnail ??
-                        ""
-                      }
-                      alt={product.name ?? product.title}
-                      className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
-                    />
+                    {/* Image */}
+                    <div className="h-64 w-full overflow-hidden bg-gray-50 flex items-center justify-center">
+                      <img
+                        src={
+                          product.imageUrl ??
+                          product.image ??
+                          product.thumbnail ??
+                          ""
+                        }
+                        alt={product.name ?? product.title}
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    </div>
 
-                    <div className="relative border border-gray-100 bg-white p-6">
+                    {/* Card Body */}
+                    <div className="p-6 border-t border-gray-100">
                       <span className="bg-yellow-400 px-3 py-1.5 text-xs font-medium whitespace-nowrap">
                         New
                       </span>
