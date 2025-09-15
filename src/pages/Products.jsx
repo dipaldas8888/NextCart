@@ -1,23 +1,28 @@
+// Products.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
+import { useCart } from "../context/CartContext";
+import { toast } from "react-hot-toast";
 
 export default function Products() {
+  const { addToCart } = useCart();
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [category, setCategory] = useState("Men"); // default category
+  const [category, setCategory] = useState("Men");
   const [search, setSearch] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 2500]); // changed max to 2500
+  const [priceRange, setPriceRange] = useState([0, 2500]);
 
   const [page, setPage] = useState(1);
   const perPage = 8;
 
-  // fetch by category
   const fetchByCategory = async (cat) => {
     try {
       setLoading(true);
       let res;
+
       if (cat === "Men") {
         res = await api.get("/product/get-by-category-id/1");
       } else if (cat === "Women") {
@@ -40,7 +45,6 @@ export default function Products() {
     setPage(1);
   }, [category]);
 
-  // client-side filter (search + price)
   const filtered = products.filter((p) => {
     const name = (p.name ?? p.title ?? "").toString().toLowerCase();
     const matchesSearch =
@@ -62,13 +66,25 @@ export default function Products() {
     setPage(1);
   };
 
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product, 1);
+    toast.success("Added to cart");
+  };
+
+  const handleWishlist = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Add to wishlist:", product.id);
+    toast.success("Added to wishlist");
+  };
+
   return (
     <div className="max-w-8xl mx-auto px-4 mb-10">
       <div className="flex gap-6">
-        {/* Sidebar */}
         <aside className="hidden md:block w-56 flex-shrink-0">
           <div className="bg-white rounded-lg shadow-sm p-5 sticky top-24">
-            {/* Search */}
             <div className="relative">
               <input
                 value={search}
@@ -81,7 +97,6 @@ export default function Products() {
               />
             </div>
 
-            {/* Category */}
             <div className="mt-6">
               <h3 className="font-semibold text-lg mb-3">Category</h3>
               <div className="space-y-2 text-sm">
@@ -135,7 +150,6 @@ export default function Products() {
           </div>
         </aside>
 
-        {/* Products Grid */}
         <main className="flex-1">
           <div className="flex items-center justify-between mb-4 mt-2">
             <h2 className="text-2xl font-bold">
@@ -148,8 +162,20 @@ export default function Products() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center h-[300px]">
-              Loading...
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="animate-pulse bg-white rounded-lg shadow-sm overflow-hidden"
+                >
+                  <div className="h-64 bg-gray-200"></div>
+                  <div className="p-4 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-8 bg-gray-200 rounded mt-4"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex items-center justify-center h-[300px] text-gray-600">
@@ -157,7 +183,6 @@ export default function Products() {
             </div>
           ) : (
             <>
-              {/* Grid: 1 on small, 2 on md, 4 on lg */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {paginated.map((product) => (
                   <Link
@@ -165,14 +190,10 @@ export default function Products() {
                     to={`/products/${product.id}`}
                     className="group relative block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition bg-white"
                   >
-                    {/* Wishlist */}
                     <button
                       type="button"
                       className="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        console.log("Add to wishlist:", product.id);
-                      }}
+                      onClick={(e) => handleWishlist(e, product)}
                     >
                       <span className="sr-only">Wishlist</span>
                       <svg
@@ -205,7 +226,6 @@ export default function Products() {
                       />
                     </div>
 
-                    {/* Card Body */}
                     <div className="p-6 border-t border-gray-100">
                       <span className="bg-yellow-400 px-3 py-1.5 text-xs font-medium whitespace-nowrap">
                         New
@@ -223,10 +243,18 @@ export default function Products() {
                         <button
                           type="button"
                           className="block w-full rounded-sm bg-yellow-400 p-3 text-sm font-medium transition hover:scale-105"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            console.log("Add to cart:", product.id);
-                          }}
+                          onClick={(e) =>
+                            handleAddToCart(e, {
+                              id: product.id,
+                              name: product.name ?? product.title,
+                              price: Number(product.price ?? product.mrp ?? 0),
+                              imageUrl:
+                                product.imageUrl ??
+                                product.image ??
+                                product.thumbnail ??
+                                "",
+                            })
+                          }
                         >
                           Add to Cart
                         </button>
